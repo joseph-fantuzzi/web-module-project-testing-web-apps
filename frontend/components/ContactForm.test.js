@@ -55,9 +55,54 @@ describe("Contact Form Component", () => {
     expect(errorMsg.textContent).toBe("Error: email must be a valid email address.");
   });
 
-  test('renders "lastName is a required field" if an last name is not entered and the submit button is clicked', async () => {});
+  test('renders "lastName is a required field" if an last name is not entered and the submit button is clicked', async () => {
+    const firstNameInput = screen.getByPlaceholderText("Edd");
+    fireEvent.change(firstNameInput, { target: { value: "Joseph" } });
+    const emailInput = screen.getByPlaceholderText("bluebill1049@hotmail.com");
+    fireEvent.change(emailInput, { target: { value: "hello@gmail.com" } });
+    const submitBtn = screen.getByText("Submit");
+    fireEvent.click(submitBtn);
+    const errorMsg = await screen.findByTestId("error");
+    expect(errorMsg.textContent).toBe("Error: lastName is a required field.");
+  });
 
-  test("renders all firstName, lastName and email text when submitted. Does NOT render message if message is not submitted.", async () => {});
+  test("renders all firstName, lastName and email text when submitted. Does NOT render message if message is not submitted.", async () => {
+    const firstNameInput = screen.getByPlaceholderText("Edd");
+    fireEvent.change(firstNameInput, { target: { value: "Joseph" } });
+    const lastNameInput = screen.getByPlaceholderText("Burke");
+    fireEvent.change(lastNameInput, { target: { value: "Fantuzzi" } });
+    const emailInput = screen.getByPlaceholderText("bluebill1049@hotmail.com");
+    fireEvent.change(emailInput, { target: { value: "hello@gmail.com" } });
+    const submitBtn = screen.getByText("Submit");
+    fireEvent.click(submitBtn);
+    const firstNameOutput = await screen.findByTestId("firstnameDisplay");
+    const lastNameOutput = await screen.findByTestId("lastnameDisplay");
+    const emailOutput = await screen.findByTestId("emailDisplay");
+    expect(firstNameOutput.textContent).toBe("First Name: Joseph");
+    expect(lastNameOutput.textContent).toBe(" Last Name: Fantuzzi");
+    expect(emailOutput.textContent).toBe("Email: hello@gmail.com");
+    const messageOutput = screen.queryByText(/message:/i);
+    expect(messageOutput).not.toBeInTheDocument();
+  });
 
-  test("renders all fields text when all fields are submitted.", async () => {});
+  test("renders all fields text when all fields are submitted.", async () => {
+    const firstNameInput = screen.getByPlaceholderText("Edd");
+    fireEvent.change(firstNameInput, { target: { value: "Joseph" } });
+    const lastNameInput = screen.getByPlaceholderText("Burke");
+    fireEvent.change(lastNameInput, { target: { value: "Fantuzzi" } });
+    const emailInput = screen.getByPlaceholderText("bluebill1049@hotmail.com");
+    fireEvent.change(emailInput, { target: { value: "hello@gmail.com" } });
+    const messageInput = screen.getByTestId("message");
+    fireEvent.change(messageInput, { target: { value: "hello there!" } });
+    const submitBtn = screen.getByText("Submit");
+    fireEvent.click(submitBtn);
+    const firstNameOutput = await screen.findByTestId("firstnameDisplay");
+    const lastNameOutput = await screen.findByTestId("lastnameDisplay");
+    const emailOutput = await screen.findByTestId("emailDisplay");
+    const messageOutput = await screen.findByTestId("messageDisplay");
+    expect(firstNameOutput.textContent).toBe("First Name: Joseph");
+    expect(lastNameOutput.textContent).toBe(" Last Name: Fantuzzi");
+    expect(emailOutput.textContent).toBe("Email: hello@gmail.com");
+    expect(messageOutput.textContent).toBe("Message: hello there!");
+  });
 });

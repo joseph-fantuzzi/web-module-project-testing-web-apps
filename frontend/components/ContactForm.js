@@ -1,18 +1,18 @@
 import React, { useState } from "react";
-import DisplayComponent from './DisplayComponent';
+import DisplayComponent from "./DisplayComponent";
 
 const formData = {
   firstName: "",
   lastName: "",
   email: "",
-  message: ""
+  message: "",
 };
 
 const errorData = {
   firstName: "",
   lastName: "",
   email: "",
-  message: ""
+  message: "",
 };
 
 const ContactForm = () => {
@@ -28,26 +28,27 @@ const ContactForm = () => {
     if (fieldName === "email" && !fieldValue.match(emailRegex))
       return `${fieldName} must be a valid email address.`;
 
-    if (fieldName !== "message" && fieldValue === "")
-      return `${fieldName} is a required field.`;
+    if (fieldName !== "message" && fieldValue === "") return `${fieldName} is a required field.`;
 
     return "";
   };
-
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     const submitErrors = {};
-    Object.keys(errors).forEach(field => {
+    Object.keys(errors).forEach((field) => {
       submitErrors[field] = errorHandling(field, form[field]);
     });
 
     setErrors(submitErrors);
 
-    const hasErrors = (submitErrors.firstName === "" && submitErrors.lastName === "" && submitErrors.email === "" && submitErrors.message === "");
+    const hasErrors =
+      submitErrors.firstName === "" &&
+      submitErrors.lastName === "" &&
+      submitErrors.email === "" &&
+      submitErrors.message === "";
     setDisplayData(hasErrors);
-
   };
 
   const handleChange = (e) => {
@@ -59,12 +60,12 @@ const ContactForm = () => {
 
     setErrors({
       ...errors,
-      [e.target.name]: errorMessage
+      [e.target.name]: errorMessage,
     });
 
     setForm({
       ...form,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
@@ -81,7 +82,7 @@ const ContactForm = () => {
             id="firstName"
             placeholder="Edd"
           />
-          {(errors.firstName) && <p data-testid="error">Error: {errors.firstName}</p>}
+          {errors.firstName && <p data-testid="error">Error: {errors.firstName}</p>}
         </div>
 
         <div>
@@ -93,7 +94,7 @@ const ContactForm = () => {
             value={form.lastName}
             placeholder="Burke"
           />
-          {(errors.lastName) && <p data-testid="error">Error: {errors.lastName}</p>}
+          {errors.lastName && <p data-testid="error">Error: {errors.lastName}</p>}
         </div>
 
         <div>
@@ -105,7 +106,7 @@ const ContactForm = () => {
             value={form.email}
             placeholder="bluebill1049@hotmail.com"
           />
-          {(errors.email) && <p data-testid="error">Error: {errors.email}</p>}
+          {errors.email && <p data-testid="error">Error: {errors.email}</p>}
         </div>
 
         <div>
@@ -113,13 +114,13 @@ const ContactForm = () => {
           <input
             onChange={handleChange}
             name="message"
-            id="message"
+            data-testid="message"
             value={form.message}
           />
-          {(errors.message) && <p data-testid="error">Error: {errors.message}</p>}
+          {errors.message && <p data-testid="error">Error: {errors.message}</p>}
         </div>
 
-        {displayData && <DisplayComponent form={form}/>}
+        {displayData && <DisplayComponent form={form} />}
 
         <button>Submit</button>
       </form>
