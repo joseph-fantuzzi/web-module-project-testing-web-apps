@@ -36,9 +36,24 @@ describe("Contact Form Component", () => {
     expect(errorMsgs).toHaveLength(3);
   });
 
-  test("renders ONE error message if user enters a valid first name and last name but no email.", async () => {});
+  test("renders ONE error message if user enters a valid first name and last name but no email.", async () => {
+    const firstNameInput = screen.getByPlaceholderText("Edd");
+    fireEvent.change(firstNameInput, { target: { value: "Joseph" } });
+    const lastNameInput = screen.getByPlaceholderText("Burke");
+    fireEvent.change(lastNameInput, { target: { value: "Fantuzzi" } });
+    const submitBtn = screen.getByText("Submit");
+    fireEvent.click(submitBtn);
+    const errorMsg = await screen.findByTestId("error");
+    expect(errorMsg).toBeVisible();
+    expect(errorMsg).toBeInTheDocument();
+  });
 
-  test('renders "email must be a valid email address" if an invalid email is entered', async () => {});
+  test('renders "email must be a valid email address" if an invalid email is entered', async () => {
+    const emailInput = screen.getByPlaceholderText("bluebill1049@hotmail.com");
+    fireEvent.change(emailInput, { target: { value: "hello" } });
+    const errorMsg = await screen.findByTestId("error");
+    expect(errorMsg.textContent).toBe("Error: email must be a valid email address.");
+  });
 
   test('renders "lastName is a required field" if an last name is not entered and the submit button is clicked', async () => {});
 
